@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自驾轨迹回放工具</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="map"></div>
+
+      <aside class="panel" aria-label="轨迹配置与控制面板">
+        <div class="panel-header">
+          <h1>自驾轨迹回放</h1>
+          <span id="statusBadge" class="status-badge">未加载</span>
+        </div>
+
+        <div id="message" class="message">按顺序填写途经点，系统会自动拼接相邻两点之间的路段。</div>
+
+        <section class="section">
+          <h2>高德配置</h2>
+          <label class="input-field">
+            <span>JS API Key</span>
+            <input id="jsKeyInput" type="password" autocomplete="off" placeholder="用于加载高德地图 JS API" />
+          </label>
+          <label class="input-field">
+            <span>Web Service Key</span>
+            <input id="serviceKeyInput" type="password" autocomplete="off" placeholder="用于地理编码和路径规划" />
+          </label>
+          <label class="input-field">
+            <span>安全密钥</span>
+            <input id="securityCodeInput" type="password" autocomplete="off" placeholder="未启用可留空" />
+          </label>
+          <div class="inline-actions">
+            <button id="saveConfigBtn" type="button" class="secondary">保存配置</button>
+            <button id="clearConfigBtn" type="button" class="ghost">清空</button>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-title">
+            <h2>途经点输入</h2>
+            <div class="inline-actions compact">
+              <button id="addWaypointBtn" type="button" class="secondary">新增途经点</button>
+              <button id="loadDefaultBtn" type="button" class="ghost">读取示例</button>
+            </div>
+          </div>
+          <div class="hint">例如填 3 个点，会自动生成第 1 点 -> 第 2 点、第 2 点 -> 第 3 点两段路线。</div>
+          <div id="waypointsEditor" class="segments-editor"></div>
+          <div class="inline-actions">
+            <button id="saveWaypointsBtn" type="button" class="secondary">保存途经点</button>
+            <button id="clearWaypointsBtn" type="button" class="ghost">清空途经点</button>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>播放控制</h2>
+          <div class="controls">
+            <button id="loadBtn" type="button">加载路线</button>
+            <button id="playBtn" type="button" disabled>开始播放</button>
+            <button id="pauseBtn" type="button" disabled>暂停</button>
+            <button id="resumeBtn" type="button" disabled>继续</button>
+            <button id="restartBtn" type="button" disabled>重新播放</button>
+          </div>
+
+          <div class="speed-control">
+            <label class="field">
+              <span>预设速度</span>
+              <select id="speedSelect">
+                <option value="1">1x</option>
+                <option value="2">2x</option>
+                <option value="5">5x</option>
+                <option value="10">10x</option>
+                <option value="50">50x</option>
+                <option value="70">70x</option>
+                <option value="custom">自定义</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>自定义倍速</span>
+              <input id="customSpeedInput" type="number" min="0.1" max="200" step="0.1" value="10" placeholder="例如 50 或 70" />
+            </label>
+          </div>
+
+          <dl class="stats">
+            <div>
+              <dt>当前路段</dt>
+              <dd id="currentSegment">-</dd>
+            </div>
+            <div>
+              <dt>总路段数</dt>
+              <dd id="segmentCount">0</dd>
+            </div>
+            <div>
+              <dt>总距离</dt>
+              <dd id="totalDistance">0 km</dd>
+            </div>
+            <div>
+              <dt>总耗时</dt>
+              <dd id="totalDuration">0 分钟</dd>
+            </div>
+          </dl>
+        </section>
+      </aside>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

@@ -40,7 +40,9 @@ body {
   width: min(460px, calc(100vw - 40px));
   max-height: calc(100vh - 40px);
   padding: 16px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   border: 1px solid var(--panel-border);
   border-radius: 8px;
   background: var(--panel-bg);
@@ -65,7 +67,14 @@ body {
 }
 
 .panel-header {
+  flex: 0 0 auto;
   margin-bottom: 12px;
+}
+
+.panel-body {
+  min-height: 0;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .panel-actions {
@@ -97,8 +106,7 @@ body {
 
 .panel.is-collapsed h1,
 .panel.is-collapsed .status-badge,
-.panel.is-collapsed .message,
-.panel.is-collapsed .section {
+.panel.is-collapsed .panel-body {
   display: none;
 }
 

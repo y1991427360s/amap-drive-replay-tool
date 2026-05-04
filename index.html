@@ -13,7 +13,10 @@
       <aside class="panel" aria-label="轨迹配置与控制面板">
         <div class="panel-header">
           <h1>自驾轨迹回放</h1>
-          <span id="statusBadge" class="status-badge">未加载</span>
+          <div class="panel-actions">
+            <span id="statusBadge" class="status-badge">未加载</span>
+            <button id="panelToggleBtn" class="panel-toggle" type="button" aria-expanded="true">收起</button>
+          </div>
         </div>
 
         <div id="message" class="message">按顺序填写途经点，系统会自动拼接相邻两点之间的路段。</div>

@@ -19,9 +19,12 @@ const STORAGE_KEYS = {
   config: "driveReplay.amapConfig",
   waypoints: "driveReplay.waypoints",
   legacySegments: "driveReplay.segments",
+  panelCollapsed: "driveReplay.panelCollapsed",
 };
 
 const dom = {
+  panel: document.querySelector(".panel"),
+  panelToggleBtn: document.querySelector("#panelToggleBtn"),
   jsKeyInput: document.querySelector("#jsKeyInput"),
   serviceKeyInput: document.querySelector("#serviceKeyInput"),
   securityCodeInput: document.querySelector("#securityCodeInput"),
@@ -68,6 +71,7 @@ init();
 
 async function init() {
   bindEvents();
+  hydratePanelState();
   hydrateConfig();
   await hydrateWaypoints();
   renderWaypointRows();
@@ -76,6 +80,7 @@ async function init() {
 }
 
 function bindEvents() {
+  dom.panelToggleBtn.addEventListener("click", togglePanel);
   dom.saveConfigBtn.addEventListener("click", saveConfig);
   dom.clearConfigBtn.addEventListener("click", clearConfig);
   dom.addWaypointBtn.addEventListener("click", () => {
@@ -107,6 +112,31 @@ function bindEvents() {
     dom.speedSelect.value = "custom";
     if (state.loaded) setMessage(`速度已更新为 ${getPlaybackSpeed()}x，重新播放后生效。`);
   });
+}
+
+function hydratePanelState() {
+  const isCollapsed = localStorage.getItem(STORAGE_KEYS.panelCollapsed) === "true";
+  setPanelCollapsed(isCollapsed, false);
+}
+
+function togglePanel() {
+  const isCollapsed = !dom.panel.classList.contains("is-collapsed");
+  setPanelCollapsed(isCollapsed);
+}
+
+function setPanelCollapsed(isCollapsed, shouldPersist = true) {
+  dom.panel.classList.toggle("is-collapsed", isCollapsed);
+  dom.panelToggleBtn.textContent = isCollapsed ? "展开面板" : "收起";
+  dom.panelToggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
+  dom.panelToggleBtn.setAttribute("aria-label", isCollapsed ? "展开控制面板" : "收起控制面板");
+
+  if (shouldPersist) {
+    localStorage.setItem(STORAGE_KEYS.panelCollapsed, String(isCollapsed));
+  }
+
+  window.setTimeout(() => {
+    if (state.map?.resize) state.map.resize();
+  }, 260);
 }
 
 function hydrateConfig() {
